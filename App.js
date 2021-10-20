@@ -1,8 +1,57 @@
+//fonts: hotel, avenir
 import { LinearGradient } from 'expo-linear-gradient';
+import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, TouchableOpacity} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+function HomePage ({navigation}){
+  return(
+    <Text style={{flex: 1, position: "absolute", top: "50%", left: "50%"}}>Placeholder</Text>
+  );
+}
+
+function ChooseUserTypeScreen ({navigation}) {
+  return (
+    <SafeAreaView style={{flex: 1}}>
+
+    {/* container */}
+      <LinearGradient colors={["#9EDE9E", "lightgrey"]} style={[styles.gradient]} start={[0,1]} end={[1,1]}/>
+      <Image source={require("./assets/UNTlogo.png")} resizeMode="contain" style={{height: 150, width: 150, position: "absolute", left: "60%", top: "5%"}}/>
+      <View style={{flex: 1, alignItems: "center"}}>
+        <Text style={{flex: 1, fontSize: 40, fontWeight: "bold", paddingBottom: 60}}>{"Eagle                         "}</Text>
+        <Text style={{flex: 1, fontSize: 40, fontWeight: "bold", paddingBottom:40}}>Rides</Text>
+      </View>
+      {/* Text with views for spacing*/}
+      <View style={{flex: 3, alignItems: "center", justifyContent: "flex-end"}}>
+        <Text style={{color: "gray", fontSize: 30, fontWeight: "bold"}}>Are you a...</Text>
+      </View>
+      <View style={{flex:1}}/>
+      {/*view contains both icons with labels*/}
+      <View style={{flex: 4, alignItems: "center"}}>
+        <View style={{flex: 5, alignItems: "center"}}>
+          <Text style={{color: "gray", fontSize: 30, fontWeight: "bold"}}>Rider?</Text>
+          <TouchableOpacity onPress={() => navigation.navigate("Homepage")} style={{flex: 1}}>
+            <Image source={require("./assets/rider.png")} resizeMode = "contain" style={{flex: 1}}/>
+          </TouchableOpacity>
+        </View>
+        {/*view for spacing*/}
+        <View style={{flex: 1}}/>
+        <View style={{flex: 5, alignItems: "center"}}>
+          <Text style={{color: "gray", fontSize: 30, fontWeight: "bold"}}>Driver?</Text>
+          {/*replace onPress function with proper back-end ones when ready*/}
+          {/*replace this image with the proper driver image later*/}
+          <TouchableOpacity onPress={() => navigation.navigate("Homepage")} style={{flex: 1}}>
+            <Image source={require("./assets/rider.png")} resizeMode = "contain" style={{flex: 1}}/>
+          </TouchableOpacity>
+        </View>
+      </View>
+      {/*View for spacing*/}
+      <View style={{flex: 1}}/>
+    </SafeAreaView>
+  );
+}
 
 //function to display login/signup screens
 //switches between sign up and login when "Sign in."/"Sign up." is pressed
@@ -36,7 +85,7 @@ function LoginScreen ({navigation}) {
 }
 
 function StartScreen ({navigation}) { //function to display starting screen
-  setTimeout(() => {navigation.navigate("Login")}, 2000);
+  setTimeout(() => {navigation.navigate("ChooseUserType")}, 2000);
   return (
     <View style={[styles.container]}>
       <View style={{ flex: 6, backgroundColor: "white", alignItems: "flex-end"}} >
@@ -81,6 +130,8 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen name="Start" component={StartScreen} options={{headerShown: false}}/>
         <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>
+        <Stack.Screen name="ChooseUserType" component={ChooseUserTypeScreen} options={{headerShown: false}}/>
+        <Stack.Screen name="Homepage" component={HomePage} options={{headerShown: false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
