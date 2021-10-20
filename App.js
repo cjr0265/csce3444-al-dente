@@ -1,21 +1,37 @@
 //fonts: hotel, avenir
 import { LinearGradient } from 'expo-linear-gradient';
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, TouchableOpacity, Button, Dimensions} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import MapView from 'react-native-maps';
 
-function HomePage ({navigation}){
+function SearchScreen ({navigation}){//placeholder for now
   return(
-    <Text style={{flex: 1, position: "absolute", top: "50%", left: "50%"}}>Placeholder</Text>
+    <Text style={{position: 'absolute', top: "50%", left: '50%'}}>Placeholder search screen</Text>
   );
 }
 
-function ChooseUserTypeScreen ({navigation}) {
+function ProfileScreen ({navigation}){//placeholder for now
+  return(
+    <Text style={{position: 'absolute', top: "50%", left: '50%'}}>Placeholder profile screen</Text>
+  );
+}
+
+function HomePage ({navigation}){//pretty basic, has an interactive map but you can't do anything with it yet
+  return(
+    <View style={{flex: 1}}>
+      <MapView style={{width: Dimensions.get('window').width, height: Dimensions.get('window').height}}/>
+    </View>
+  );
+}
+
+function ChooseUserTypeScreen ({navigation}) {//displays screen for signing up as a rider or a driver
   return (
     <SafeAreaView style={{flex: 1}}>
-
     {/* container */}
       <LinearGradient colors={["#9EDE9E", "lightgrey"]} style={[styles.gradient]} start={[0,1]} end={[1,1]}/>
       <Image source={require("./assets/UNTlogo.png")} resizeMode="contain" style={{height: 150, width: 150, position: "absolute", left: "60%", top: "5%"}}/>
@@ -76,6 +92,7 @@ function LoginScreen ({navigation}) {
           {/*email and password remain throughout both modes*/}
           <TextInput style={[styles.loginInput]} placeholder="Email:" onChangeText={setEmail} value={email}/>
           <TextInput style={[styles.loginInput]} placeholder="Password:" onChangeText={setPass} value={pass} secureTextEntry={true}/>
+          <Button title="Continue" color="red" onPress={() => show ? navigation.navigate("ChooseUserType") : navigation.navigate("Homepage")}/>
         </KeyboardAvoidingView>
         <Text style={{position: "absolute", bottom: "20%", alignSelf: "center"}}>{show ? "Returning user?" : "New user?"}</Text>
         <Text style={{position: "absolute", bottom: "16%", alignSelf: "center", color: "red"}} onPress={() => setShow(!show)}>{show ? "Sign in." : "Sign up."}</Text>
@@ -85,7 +102,7 @@ function LoginScreen ({navigation}) {
 }
 
 function StartScreen ({navigation}) { //function to display starting screen
-  setTimeout(() => {navigation.navigate("ChooseUserType")}, 2000);
+  setTimeout(() => {navigation.navigate("Login")}, 2000);
   return (
     <View style={[styles.container]}>
       <View style={{ flex: 6, backgroundColor: "white", alignItems: "flex-end"}} >
@@ -122,6 +139,34 @@ function StartScreen ({navigation}) { //function to display starting screen
   );
 }
 
+function HomeTabs(){//holds screens that use a tab at the bottom to for navigation
+  const Tab = createBottomTabNavigator();
+  return (
+    <Tab.Navigator initialRouteName="Home"
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === 'Home') {
+              iconName = 'home';
+            } else if (route.name === 'Profile') {
+              iconName = 'person-circle-outline';
+            } else if(route.name === 'Search'){
+              iconName = 'search-outline'
+            }
+            return <Ionicons name={iconName} size={size} color={color}/>;
+          },
+          tabBarActiveTintColor: 'black',
+          tabBarInactiveTintColor: 'gray',
+        })}
+      >
+       <Tab.Screen name="Search" component={SearchScreen} options={{headerShown: false}}/>
+       <Tab.Screen name="Home" component={HomePage} options={{headerShown: false}}/>
+       <Tab.Screen name="Profile" component={ProfileScreen} options={{headerShown: false}}/>
+    </Tab.Navigator>
+  )
+}
+
 export default function App() {
 
   const Stack = createNativeStackNavigator(); //main app function, holds navigator
@@ -131,7 +176,7 @@ export default function App() {
         <Stack.Screen name="Start" component={StartScreen} options={{headerShown: false}}/>
         <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>
         <Stack.Screen name="ChooseUserType" component={ChooseUserTypeScreen} options={{headerShown: false}}/>
-        <Stack.Screen name="Homepage" component={HomePage} options={{headerShown: false}}/>
+        <Stack.Screen name="Homepage" component={HomeTabs} options={{headerShown: false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
