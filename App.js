@@ -94,8 +94,8 @@ function LoginScreen ({navigation}) {
           <TextInput style={[styles.loginInput]} placeholder="Password:" onChangeText={setPass} value={pass} secureTextEntry={true}/>
           <Button title="Continue" color="red" onPress={() => show ? navigation.navigate("ChooseUserType") : navigation.navigate("Homepage")}/>
         </KeyboardAvoidingView>
-        <Text style={{position: "absolute", bottom: "20%", alignSelf: "center"}}>{show ? "Returning user?" : "New user?"}</Text>
-        <Text style={{position: "absolute", bottom: "16%", alignSelf: "center", color: "red"}} onPress={() => setShow(!show)}>{show ? "Sign in." : "Sign up."}</Text>
+        <Text style={{position: "absolute", top: "80%", alignSelf: "center"}}>{show ? "Returning user?" : "New user?"}</Text>
+        <Text style={{position: "absolute", top: "84%", alignSelf: "center", color: "red"}} onPress={() => setShow(!show)}>{show ? "Sign in." : "Sign up."}</Text>
       </View>
 
   );
