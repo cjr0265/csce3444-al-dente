@@ -173,10 +173,10 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Start" component={StartScreen} options={{headerShown: false}}/>
-        <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>
-        <Stack.Screen name="ChooseUserType" component={ChooseUserTypeScreen} options={{headerShown: false}}/>
-        <Stack.Screen name="Homepage" component={HomeTabs} options={{headerShown: false}}/>
+        <Stack.Screen name="Start" component={StartScreen} options={{headerShown: false, gestureEnabled: false}}/>
+        <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false, gestureEnabled: false}}/>
+        <Stack.Screen name="ChooseUserType" component={ChooseUserTypeScreen} options={{headerShown: false, gestureEnabled: false}}/>
+        <Stack.Screen name="Homepage" component={HomeTabs} options={{headerShown: false, gestureEnabled: false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
