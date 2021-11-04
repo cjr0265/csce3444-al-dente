@@ -8,6 +8,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MapView from 'react-native-maps';
+import { useFonts } from '@use-expo/font';
+import AppLoading from 'expo-app-loading';
 
 function SearchScreen ({navigation}){//placeholder for now
   return(
@@ -36,18 +38,18 @@ function ChooseUserTypeScreen ({navigation}) {//displays screen for signing up a
       <LinearGradient colors={["#9EDE9E", "lightgrey"]} style={[styles.gradient]} start={[0,1]} end={[1,1]}/>
       <Image source={require("./assets/UNTlogo.png")} resizeMode="contain" style={{height: 150, width: 150, position: "absolute", left: "60%", top: "5%"}}/>
       <View style={{flex: 1, alignItems: "center"}}>
-        <Text style={{flex: 1, fontSize: 40, fontWeight: "bold", paddingBottom: 60}}>{"Eagle                         "}</Text>
-        <Text style={{flex: 1, fontSize: 40, fontWeight: "bold", paddingBottom:40}}>Rides</Text>
+        <Text style={{fontFamily: "Tourney", color: "black", flex: 1, fontSize: 40, fontWeight: "bold", paddingBottom: 60}}>{"EAGLE                     "}</Text>
+        <Text style={{fontFamily: "Tourney", color: "black", flex: 1, fontSize: 40, fontWeight: "bold", paddingBottom:40}}>RIDES</Text>
       </View>
       {/* Text with views for spacing*/}
       <View style={{flex: 3, alignItems: "center", justifyContent: "flex-end"}}>
-        <Text style={{color: "gray", fontSize: 30, fontWeight: "bold"}}>Are you a...</Text>
+        <Text style={{fontFamily: "Avenir", color: "gray", fontSize: 30, fontWeight: "bold"}}>Are you a...</Text>
       </View>
       <View style={{flex:1}}/>
       {/*view contains both icons with labels*/}
       <View style={{flex: 4, alignItems: "center"}}>
         <View style={{flex: 5, alignItems: "center"}}>
-          <Text style={{color: "gray", fontSize: 30, fontWeight: "bold"}}>Rider?</Text>
+          <Text style={{fontFamily: "Avenir", color: "gray", fontSize: 30, fontWeight: "bold"}}>Rider?</Text>
           <TouchableOpacity onPress={() => navigation.navigate("Homepage")} style={{flex: 1}}>
             <Image source={require("./assets/rider.png")} resizeMode = "contain" style={{flex: 1}}/>
           </TouchableOpacity>
@@ -55,7 +57,7 @@ function ChooseUserTypeScreen ({navigation}) {//displays screen for signing up a
         {/*view for spacing*/}
         <View style={{flex: 1}}/>
         <View style={{flex: 5, alignItems: "center"}}>
-          <Text style={{color: "gray", fontSize: 30, fontWeight: "bold"}}>Driver?</Text>
+          <Text style={{fontFamily: "Avenir", color: "gray", fontSize: 30, fontWeight: "bold"}}>Driver?</Text>
           {/*replace onPress function with proper back-end ones when ready*/}
           {/*replace this image with the proper driver image later*/}
           <TouchableOpacity onPress={() => navigation.navigate("Homepage")} style={{flex: 1}}>
@@ -94,8 +96,8 @@ function LoginScreen ({navigation}) {
           <TextInput style={[styles.loginInput]} placeholder="Password:" onChangeText={setPass} value={pass} secureTextEntry={true}/>
           <Button title="Continue" color="red" onPress={() => show ? navigation.navigate("ChooseUserType") : navigation.navigate("Homepage")}/>
         </KeyboardAvoidingView>
-        <Text style={{position: "absolute", top: "80%", alignSelf: "center"}}>{show ? "Returning user?" : "New user?"}</Text>
-        <Text style={{position: "absolute", top: "84%", alignSelf: "center", color: "red"}} onPress={() => setShow(!show)}>{show ? "Sign in." : "Sign up."}</Text>
+        <Text style={{fontFamily: "Avenir", position: "absolute", top: "80%", alignSelf: "center", fontWeight: "bold", color: "dimgray", fontSize: 17}}>{show ? "Returning user?" : "New user?"}</Text>
+        <Text style={{fontFamily: "Avenir", position: "absolute", top: "84%", alignSelf: "center", fontWeight: "bold", color: "dimgray", textDecorationLine: "underline"}} onPress={() => setShow(!show)}>{show ? "Sign in." : "Sign up."}</Text>
       </View>
 
   );
@@ -113,12 +115,12 @@ function StartScreen ({navigation}) { //function to display starting screen
           <Image source={require("./assets/UNTlogo.png")} resizeMode="contain" style={{width: "100%", height: "100%"}} />
         </View>
         <View style={{alignSelf: "center"}}>
-          {/*eagle rides text, will change font later or change to image*/}
-          <Text style={{color: "green", fontSize: 65, fontWeight: "bold"}}>Eagle        </Text>
-          <Text style={{color: "green", fontSize: 65, fontWeight: "bold"}}>         Rides</Text>
+          {/*eagle rides text*/}
+          <Text style={{fontFamily: "Tourney-Black", color: "green", fontSize: 65, fontWeight: "bold"}}>EAGLE        </Text>
+          <Text style={{fontFamily: "Tourney-Black", color: "green", fontSize: 65, fontWeight: "bold"}}>         RIDES</Text>
         </View>
         <View style={{height: "35%", width: "40%", alignSelf: "center"}}>
-          {/*displays car image, using a random one i found online for now*/}
+          {/*displays car image, using a random one I found online for now*/}
           <Image source={require("./assets/car.jpg")} resizeMode="contain" style={{width: "100%", height: "100%"}}/>
         </View>
       </View>
@@ -158,6 +160,7 @@ function HomeTabs(){//holds screens that use a tab at the bottom to for navigati
           },
           tabBarActiveTintColor: 'black',
           tabBarInactiveTintColor: 'gray',
+          tabBarShowLabel: false,
         })}
       >
        <Tab.Screen name="Search" component={SearchScreen} options={{headerShown: false}}/>
@@ -169,6 +172,16 @@ function HomeTabs(){//holds screens that use a tab at the bottom to for navigati
 
 export default function App() {
 
+  let [fontsLoaded] = useFonts({
+    'Tourney-Black': require('./assets/Tourney-Black.ttf'),
+    'Tourney': require('./assets/Tourney-Regular.ttf'),
+  });
+
+  if(!fontsLoaded){
+    return <AppLoading/>;
+  }
+
+  
   const Stack = createNativeStackNavigator(); //main app function, holds navigator
   return (
     <NavigationContainer>
@@ -212,6 +225,7 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor:"black"
+    borderBottomColor:"black",
+    fontFamily: "Avenir"
   },
 });
