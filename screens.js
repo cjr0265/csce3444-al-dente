@@ -70,9 +70,44 @@ export function SearchScreen ({navigation}){//placeholder for now
     );
 }
 
-export function ProfileScreen ({navigation}){//placeholder for now
+export function ProfileScreen ({navigation}){
     return(
-        <Text style={{position: 'absolute', top: "50%", left: '50%'}}>Placeholder profile screen</Text>
+        <SafeAreaView style={{flex: 1}}>
+            <View style={{left: "5%", justifyContent: "flex-end", top: "5%"}}>
+                <Text style={{fontFamily: "Avenir", color: "black", fontSize: 30, fontWeight: "bold"}}>Profile</Text>
+            </View>
+                    
+            <Image source={require("./assets/Profile-Avatar.png")} resizeMode="contain" style={{height: 125, width: 125, top: "5%"}}/>
+            
+            <View style={{top: "10%"}}>
+                <Text style={{fontFamily: "Avenir", color: "grey", fontSize: 14, left: "3%"}}>First Name</Text>
+                <Text style={{fontFamily: "Avenir", color: "black", fontSize: 14, left: "3%"}}>Alice</Text>  
+            </View>
+
+        
+            <View style={{top: "10%"}}>
+                <View style={{marginVertical: 8,borderBottomColor: '#737373',borderBottomWidth: 1}} />
+                <Text style={{fontFamily: "Avenir", color: "grey", fontSize: 14, left: "3%"}}>Last Name</Text>
+                <Text style={{fontFamily: "Avenir", color: "black", fontSize: 14, left: "3%"}}>Bob</Text>
+            </View>
+
+            <View style={{top: "10%"}}>
+                <View style={{marginVertical: 8,borderBottomColor: '#737373',borderBottomWidth: 1}} />
+                <Text style={{fontFamily: "Avenir", color: "grey", fontSize: 14, left: "3%"}}>Email Address</Text>
+                <Text style={{fontFamily: "Avenir", color: "black", fontSize: 14, left: "3%"}}>alicebob@my.unt.edu</Text>
+            </View>
+
+            <View style={{top: "10%"}}>
+                <View style={{marginVertical: 8,borderBottomColor: '#737373',borderBottomWidth: 1}} />
+                <Text style={{fontFamily: "Avenir", color: "grey", fontSize: 14, left: "3%"}}>Password</Text>
+                <Text style={{fontFamily: "Avenir", color: "black", fontSize: 14, left: "3%"}}>••••••••••</Text>
+            </View>
+
+            <View style={{top: "10%"}}>
+                <View style={{marginVertical: 8,borderBottomColor: '#737373',borderBottomWidth: 1}} />
+            </View>
+            
+        </SafeAreaView>
     );
 }
 
