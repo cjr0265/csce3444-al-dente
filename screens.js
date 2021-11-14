@@ -35,7 +35,6 @@ export function SearchScreen ({navigation}){//placeholder for now
         <SafeAreaView style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
             <View style={{flex: 1, flexDirection: "column"}}>
                 <SearchBar
-                    placeholder="Type Here..."
                     onChangeText={setSearch}
                     value={search}
                     platform="ios"
@@ -43,7 +42,7 @@ export function SearchScreen ({navigation}){//placeholder for now
                 {/* button to swap between user and routes search*/}
                 <TouchableOpacity onPress={() => setType(!type)}>
                     <View style = {{backgroundColor: "lightgray", alignItems: "center", padding: 20, margin: 10}}>
-                        <Text>{type ? "Current search: user" : "Current search: route"}</Text>
+                        <Text style={{fontFamily: "Avenir"}}>{type ? "Current search: user" : "Current search: route"}</Text>
                     </View>
                 </TouchableOpacity>
                 {/*Data is array with data to be displayed, renderItem is function that is called for each individual entry in the list*/}
@@ -59,7 +58,7 @@ export function SearchScreen ({navigation}){//placeholder for now
                                     marginHorizontal: 16,
                                     backgroundColor: "#9EDE9E"}}
                                 >
-                                    <Text>{data.item.name}</Text>
+                                    <Text style={{fontFamily: "Avenir"}}>{data.item.name}</Text>
                                 </View>
                             </TouchableOpacity>
                         );
