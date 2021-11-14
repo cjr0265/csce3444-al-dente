@@ -79,34 +79,33 @@ export function ProfileScreen ({navigation}){
             <Image source={require("./assets/Profile-Avatar.png")} resizeMode="contain" style={{height: 125, width: 125, top: "5%"}}/>
             
             <View style={{top: "10%"}}>
-                <Text style={{fontFamily: "Avenir", color: "grey", fontSize: 14, left: "3%"}}>First Name</Text>
-                <Text style={{fontFamily: "Avenir", color: "black", fontSize: 14, left: "3%"}}>Alice</Text>  
+                <Text style={[styles.profileTextGrey]}>First Name</Text>
+                <Text style={[styles.profileTextBlack]}>Alice</Text>  
             </View>
 
         
             <View style={{top: "10%"}}>
-                <View style={{marginVertical: 8,borderBottomColor: '#737373',borderBottomWidth: 1}} />
-                <Text style={{fontFamily: "Avenir", color: "grey", fontSize: 14, left: "3%"}}>Last Name</Text>
-                <Text style={{fontFamily: "Avenir", color: "black", fontSize: 14, left: "3%"}}>Bob</Text>
+                <View style={[styles.separator]} />
+                <Text style={[styles.profileTextGrey]}>Last Name</Text>
+                <Text style={[styles.profileTextBlack]}>Bob</Text>
             </View>
 
             <View style={{top: "10%"}}>
-                <View style={{marginVertical: 8,borderBottomColor: '#737373',borderBottomWidth: 1}} />
-                <Text style={{fontFamily: "Avenir", color: "grey", fontSize: 14, left: "3%"}}>Email Address</Text>
-                <Text style={{fontFamily: "Avenir", color: "black", fontSize: 14, left: "3%"}}>alicebob@my.unt.edu</Text>
+                <View style={[styles.separator]} />
+                <Text style={[styles.profileTextGrey]}>Email Address</Text>
+                <Text style={[styles.profileTextBlack]}>alicebob@my.unt.edu</Text>
             </View>
 
             <View style={{top: "10%"}}>
-                <View style={{marginVertical: 8,borderBottomColor: '#737373',borderBottomWidth: 1}} />
-                <Text style={{fontFamily: "Avenir", color: "grey", fontSize: 14, left: "3%"}}>Password</Text>
-                <Text style={{fontFamily: "Avenir", color: "black", fontSize: 14, left: "3%"}}>••••••••••</Text>
+                <View style={[styles.separator]} />
+                <Text style={[styles.profileTextGrey]}>Password</Text>
+                <Text style={[styles.profileTextBlack]}>••••••••••</Text>
             </View>
 
             <View style={{top: "10%"}}>
-                <View style={{marginVertical: 8,borderBottomColor: '#737373',borderBottomWidth: 1}} />
-            </View>
-            
-        </SafeAreaView>
+                <View style={[styles.separator]} />
+            </View>   
+        </SafeAreaView>  
     );
 }
 
@@ -304,4 +303,21 @@ export const styles = StyleSheet.create({
         fontWeight: "bold", 
         paddingBottom: 60
     },
+     profileTextGrey: {
+        fontFamily: "Avenir",
+        color: "grey",
+        fontSize: 14,
+        left: "3%"     
+    },
+    profileTextBlack: {
+        fontFamily: "Avenir",
+        color: "black",
+        fontSize: 14,
+        left: "3%"
+    },
+    separator: {
+        marginVertical: 8,
+        borderBottomColor: '#737373',
+        borderBottomWidth: 1
+    },    
 });
