@@ -1,12 +1,72 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, TouchableOpacity, Button, Dimensions } from 'react-native';
-import MapView from 'react-native-maps';
+import { Platform, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, TouchableOpacity, Button, Dimensions, FlatList } from 'react-native';
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import MapViewDirections from 'react-native-maps-directions';
+import { SearchBar } from 'react-native-elements';
+
+const APIKEY = "AIzaSyAr0Rv7MLjkYl_a7vuKGrZkp4P7dqqEaGM";
 
 export function SearchScreen ({navigation}){//placeholder for now
+
+    const [search, setSearch] = useState('');//holds text entered to searchbar
+    const [type, setType] = useState(false);//holds whether user is searching for routes or for users
+    const DATA = [//holds data to be rendered to flatlist, currently full of temporary data. Should eventually be updated by search algorithm
+        {
+            id: '1',
+            name: "Camden",
+        },
+        {
+            id: '2',
+            name: "Michelle",
+        },
+        {
+            id: '3',
+            name: "Grayson",
+        },
+        {
+            id: '4',
+            name: 'Cooper',
+        },
+    ];
+
     return(
-        <Text style={{position: 'absolute', top: "50%", left: '50%'}}>Placeholder search screen</Text>
+        <SafeAreaView style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
+            <View style={{flex: 1, flexDirection: "column"}}>
+                <SearchBar
+                    placeholder="Type Here..."
+                    onChangeText={setSearch}
+                    value={search}
+                    platform="ios"
+                />
+                {/* button to swap between user and routes search*/}
+                <TouchableOpacity onPress={() => setType(!type)}>
+                    <View style = {{backgroundColor: "lightgray", alignItems: "center", padding: 20, margin: 10}}>
+                        <Text>{type ? "Current search: user" : "Current search: route"}</Text>
+                    </View>
+                </TouchableOpacity>
+                {/*Data is array with data to be displayed, renderItem is function that is called for each individual entry in the list*/}
+                <FlatList
+                    data={DATA}
+                    renderItem={(data)=>{
+                        return(
+                            <TouchableOpacity onPress={() => {alert("Profile selected!")}} >
+                                <View style={{
+                                    flex: 1,
+                                    padding: 20,
+                                    marginVertical: 8,
+                                    marginHorizontal: 16,
+                                    backgroundColor: "#9EDE9E"}}
+                                >
+                                    <Text>{data.item.name}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    }}
+                />
+            </View>
+        </SafeAreaView>
     );
 }
 
@@ -16,10 +76,30 @@ export function ProfileScreen ({navigation}){//placeholder for now
     );
 }
 
-export function HomePage ({navigation}){//pretty basic, has an interactive map but you can't do anything with it yet
+export function HomePage ({navigation}){//pretty basic, has variables for navigation when it is properly implemented
+
+    let origin = "UNT Discovery Park";
+    let destination = "UNT Student Union";
+
     return(
         <View style={{flex: 1}}>
-            <MapView style={{width: Dimensions.get('window').width, height: Dimensions.get('window').height}}/>
+            <MapView style={{
+                width: Dimensions.get('window').width, 
+                height: Dimensions.get('window').height
+            }}
+            region={{//allows map to load straight to Denton
+                latitude: 33.2148,
+                longitude: -97.1331,
+                latitudeDelta: 0.15,
+                longitudeDelta: 0.15
+            }}>
+                <MapViewDirections 
+                origin={origin}
+                destination={destination}
+                apikey={APIKEY}
+                strokeWidth={3}
+                strokeColor="hotpink"/>
+            </MapView>
         </View>
     );
 }
@@ -166,6 +246,15 @@ export const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor:"black",
         fontFamily: "Avenir"
+    },
+    searchInput: {
+        height: 35,
+        width: 250,
+        margin: 10,
+        padding: 10,
+        borderBottomWidth: 1,
+        borderColor:"black",
+        fontFamily: "Avenir",
     },
     logoStartScreen: {
         fontFamily: "Tourney-Black", 
