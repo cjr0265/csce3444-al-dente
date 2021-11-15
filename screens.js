@@ -158,7 +158,7 @@ export function ChooseUserTypeScreen ({navigation}) {//displays screen for signi
                     <Text style={{fontFamily: "Avenir", color: "gray", fontSize: 30, fontWeight: "bold"}}>Rider?</Text>
                     {/*replace onPress function with proper back-end ones when ready*/}
                     <TouchableOpacity onPress={() => navigation.navigate("Homepage")} style={{flex: 1}}>
-                        <Image source={require("./assets/rider.png")} resizeMode = "contain" style={{flex: 1}}/>
+                        <Image source={require("./assets/rider.png")} resizeMode = "contain" style={{flex: 1, maxWidth: "20%"}}/>
                     </TouchableOpacity>
                 </View>
                 {/*view for spacing*/}
@@ -166,8 +166,8 @@ export function ChooseUserTypeScreen ({navigation}) {//displays screen for signi
                 <View style={{flex: 5, alignItems: "center"}}>
                     <Text style={{fontFamily: "Avenir", color: "gray", fontSize: 30, fontWeight: "bold"}}>Driver?</Text>
                     {/*replace onPress function with proper back-end ones when ready*/}
-                    <TouchableOpacity onPress={() => navigation.navigate("Homepage")} style={{flex: 1,maxWidth: "20%", backgroundColor: "#F1F1F1"}}>
-                        <Image source={require("./assets/driver.png")} resizeMode = "contain" style={{flex: 1, alignSelf: "center"}}/>
+                    <TouchableOpacity onPress={() => navigation.navigate("Homepage")} style={{flex: 1}}>
+                        <Image source={require("./assets/newDriver.png")} resizeMode = "contain" style={{flex: 1, alignSelf: "center", maxWidth: "20%"}}/>
                     </TouchableOpacity>
                 </View>
             </View>
