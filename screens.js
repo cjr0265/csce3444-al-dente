@@ -1,54 +1,147 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useState } from 'react';
-import { Platform, StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, TouchableOpacity, Button, Dimensions, FlatList } from 'react-native';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import { StyleSheet, Text, View, Image, TextInput, KeyboardAvoidingView, TouchableOpacity, Button, Dimensions, FlatList } from 'react-native';
+import MapView from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import { SearchBar } from 'react-native-elements';
+import filter from 'lodash.filter';
+import { useIsFocused } from '@react-navigation/native';
 
 const APIKEY = "AIzaSyAr0Rv7MLjkYl_a7vuKGrZkp4P7dqqEaGM";
+let currentRoute = {//updated when route is selected in search
+    name: "", 
+    origin: "", 
+    destination: ""
+};
 
-export function SearchScreen ({navigation}){//placeholder for now
+export function SearchScreen ({navigation}){
 
-    const [search, setSearch] = useState('');//holds text entered to searchbar
     const [type, setType] = useState(false);//holds whether user is searching for routes or for users
-    const DATA = [//holds data to be rendered to flatlist, currently full of temporary data. Should eventually be updated by search algorithm
+    const [userData, setUserData] = useState([]);//holds users currently displayed
+    const [routeData, setRouteData] = useState([]);//holds routes currently displayed
+    const [query, setQuery] = useState('');//holds user entered search text
+    const fullUserData = [//holds all user data
         {
             id: '1',
-            name: "Camden",
+            first: "Camden",
+            last: "Williams",
+            email: "camdenwilliams2@my.unt.edu"
+
         },
         {
             id: '2',
-            name: "Michelle",
+            first: "Michelle",
+            last: "Cabrales",
+            email: "michellecabrales@my.unt.edu"
         },
         {
             id: '3',
-            name: "Grayson",
+            first: "Grayson",
+            last: "Baker",
+            email: "graysonbaker@my.unt.edu"
         },
         {
             id: '4',
-            name: 'Cooper',
+            first: 'Cooper',
+            last: 'Rondinelli',
+            email: 'cooperondinelli@my.unt.edu'
         },
     ];
+
+    const fullRouteData = [//holds all route data
+        {
+            name: 'Discovery Park to UNT Student Union',
+            origin: 'UNT Discovery Park',
+            destination: 'UNT Student Union'
+        },
+        {
+            name: 'Murder Kroger to Apogee',
+            origin: 'Kroger University Denton',
+            destination: 'Apogee Stadium'
+        },
+        {
+            name: 'TWU to Thrift Giant',
+            origin: 'TWU Denton',
+            destination: 'Thrift Giant Denton'
+        },
+    ];
+
+    const handleRouteSearch = text =>{//route search handler
+        const formattedQuery = text.toLowerCase();//converts input text to lowercase
+        const filteredData = filter(fullRouteData, route => {
+            return routeContains(route, formattedQuery);
+        });
+        setRouteData(filteredData);//updates displayed route data
+        setQuery(text);//updates search box with input text
+    }
+
+    const routeContains = ({ name, origin, destination}, query) => {//checks data to see if it matches query
+        name = name.toLowerCase();
+        origin = origin.toLowerCase();
+        destination = destination.toLowerCase();
+
+        if (query === ''){
+            return false;
+        }
+
+        if (name.includes(query) || origin.includes(query) || destination.includes(query)){
+            return true;
+        }
+        return false;
+    };
+
+    const handleUserSearch = text => {//same as above but for users
+        const formattedQuery = text.toLowerCase();
+        const filteredData = filter(fullUserData, user => {
+          return userContains(user, formattedQuery);
+        });
+        setUserData(filteredData);
+        setQuery(text);
+      };
+      
+      const userContains = ({ id, first, last, email }, query) => {//same as above but for users
+        first = first.toLowerCase();
+        last = last.toLowerCase();
+        email = email.toLowerCase();
+        if (query === ''){
+            return false;
+        }
+        if (first.includes(query) || id.includes(query) || last.includes(query) || email.includes(query)) {
+          return true;
+        }
+      
+        return false;
+      };
 
     return(
         <SafeAreaView style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
             <View style={{flex: 1, flexDirection: "column"}}>
-                <SearchBar
-                    onChangeText={setSearch}
-                    value={search}
+                {/* search bar changes with type button */}
+                { type ?  (<SearchBar
+                    onChangeText={queryText => handleUserSearch(queryText)}
+                    value={query}
                     platform="ios"
-                />
+                    autoCorrect={false}
+                />) : (<SearchBar
+                    onChangeText={queryText => handleRouteSearch(queryText)}
+                    value={query}
+                    platform="ios"
+                    autoCorrect={false}
+                />)}
+                
                 {/* button to swap between user and routes search*/}
                 <TouchableOpacity onPress={() => setType(!type)}>
                     <View style = {{backgroundColor: "lightgray", alignItems: "center", padding: 20, margin: 10}}>
                         <Text style={{fontFamily: "Avenir"}}>{type ? "Current search: user" : "Current search: route"}</Text>
                     </View>
                 </TouchableOpacity>
-                {/*Data is array with data to be displayed, renderItem is function that is called for each individual entry in the list*/}
-                <FlatList
-                    data={DATA}
-                    renderItem={(data)=>{
+                {/*Data is array with data to be displayed, renderItem is function that is called for each individual entry in the list
+                Flatlist changes with type button*/}
+                {type ? (<FlatList
+                    data={userData}
+                    keyExtractor={item => item.id}
+                    renderItem={({item})=>{
                         return(
                             <TouchableOpacity onPress={() => {alert("Profile selected!")}} >
                                 <View style={{
@@ -58,12 +151,34 @@ export function SearchScreen ({navigation}){//placeholder for now
                                     marginHorizontal: 16,
                                     backgroundColor: "#9EDE9E"}}
                                 >
-                                    <Text style={{fontFamily: "Avenir"}}>{data.item.name}</Text>
+                                    <Text style={{fontFamily: "Avenir"}}>{item.first + ' ' + item.last}</Text>
                                 </View>
                             </TouchableOpacity>
                         );
                     }}
-                />
+                />) : (<FlatList
+                    data={routeData}
+                    keyExtractor={item => item.name}
+                    renderItem={({item})=>{
+                        return(
+                            <TouchableOpacity onPress={() => {
+                                currentRoute.origin = item.origin;
+                                currentRoute.destination = item.destination;
+                                navigation.navigate("Home");
+                                }}>
+                                <View style={{
+                                    flex: 1,
+                                    padding: 20,
+                                    marginVertical: 8,
+                                    marginHorizontal: 16,
+                                    backgroundColor: "#9EDE9E"}}
+                                >
+                                    <Text style={{fontFamily: "Avenir"}}>{item.name}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    }}
+                />)}
             </View>
         </SafeAreaView>
     );
@@ -111,8 +226,7 @@ export function ProfileScreen ({navigation}){
 
 export function HomePage ({navigation}){//pretty basic, has variables for navigation when it is properly implemented
 
-    let origin = "UNT Discovery Park";
-    let destination = "UNT Student Union";
+    useIsFocused();
 
     return(
         <View style={{flex: 1}}>
@@ -127,8 +241,8 @@ export function HomePage ({navigation}){//pretty basic, has variables for naviga
                 longitudeDelta: 0.15
             }}>
                 <MapViewDirections 
-                origin={origin}
-                destination={destination}
+                origin={currentRoute.origin}
+                destination={currentRoute.destination}
                 apikey={APIKEY}
                 strokeWidth={3}
                 strokeColor="hotpink"/>
