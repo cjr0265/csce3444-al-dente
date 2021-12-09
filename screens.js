@@ -7,6 +7,8 @@ import MapViewDirections from 'react-native-maps-directions';
 import { SearchBar } from 'react-native-elements';
 import filter from 'lodash.filter';
 import { useIsFocused } from '@react-navigation/native';
+import { fullUserData } from './users';
+import { fullRouteData } from './routes';
 
 const APIKEY = "AIzaSyAr0Rv7MLjkYl_a7vuKGrZkp4P7dqqEaGM";
 let currentRoute = {//updated when route is selected in search
@@ -15,57 +17,18 @@ let currentRoute = {//updated when route is selected in search
     destination: ""
 };
 
+export const currentProfile = {//updated when profile is created or selected
+    first: "",
+    last: "",
+    email: ""
+};
+
 export function SearchScreen ({navigation}){
 
     const [type, setType] = useState(false);//holds whether user is searching for routes or for users
     const [userData, setUserData] = useState([]);//holds users currently displayed
     const [routeData, setRouteData] = useState([]);//holds routes currently displayed
     const [query, setQuery] = useState('');//holds user entered search text
-    const fullUserData = [//holds all user data
-        {
-            id: '1',
-            first: "Camden",
-            last: "Williams",
-            email: "camdenwilliams2@my.unt.edu"
-
-        },
-        {
-            id: '2',
-            first: "Michelle",
-            last: "Cabrales",
-            email: "michellecabrales@my.unt.edu"
-        },
-        {
-            id: '3',
-            first: "Grayson",
-            last: "Baker",
-            email: "graysonbaker@my.unt.edu"
-        },
-        {
-            id: '4',
-            first: 'Cooper',
-            last: 'Rondinelli',
-            email: 'cooperondinelli@my.unt.edu'
-        },
-    ];
-
-    const fullRouteData = [//holds all route data
-        {
-            name: 'Discovery Park to UNT Student Union',
-            origin: 'UNT Discovery Park',
-            destination: 'UNT Student Union'
-        },
-        {
-            name: 'Murder Kroger to Apogee',
-            origin: 'Kroger University Denton',
-            destination: 'Apogee Stadium'
-        },
-        {
-            name: 'TWU to Thrift Giant',
-            origin: 'TWU Denton',
-            destination: 'Thrift Giant Denton'
-        },
-    ];
 
     const handleRouteSearch = text =>{//route search handler
         const formattedQuery = text.toLowerCase();//converts input text to lowercase
@@ -100,14 +63,13 @@ export function SearchScreen ({navigation}){
         setQuery(text);
       };
       
-      const userContains = ({ id, first, last, email }, query) => {//same as above but for users
+      const userContains = ({ id, first, last }, query) => {//same as above but for users
         first = first.toLowerCase();
         last = last.toLowerCase();
-        email = email.toLowerCase();
         if (query === ''){
             return false;
         }
-        if (first.includes(query) || id.includes(query) || last.includes(query) || email.includes(query)) {
+        if (first.includes(query) || id.includes(query) || last.includes(query)) {
           return true;
         }
       
@@ -136,6 +98,7 @@ export function SearchScreen ({navigation}){
                         <Text style={{fontFamily: "Avenir"}}>{type ? "Current search: user" : "Current search: route"}</Text>
                     </View>
                 </TouchableOpacity>
+                
                 {/*Data is array with data to be displayed, renderItem is function that is called for each individual entry in the list
                 Flatlist changes with type button*/}
                 {type ? (<FlatList
@@ -143,7 +106,7 @@ export function SearchScreen ({navigation}){
                     keyExtractor={item => item.id}
                     renderItem={({item})=>{
                         return(
-                            <TouchableOpacity onPress={() => {alert("Profile selected!")}} >
+                            <TouchableOpacity onPress={() => {alert("Profile selected!\n" + item.first +' ' + item.last + '\n' + item.email)}} >
                                 <View style={{
                                     flex: 1,
                                     padding: 20,
@@ -161,6 +124,7 @@ export function SearchScreen ({navigation}){
                     keyExtractor={item => item.name}
                     renderItem={({item})=>{
                         return(
+                            
                             <TouchableOpacity onPress={() => {
                                 currentRoute.origin = item.origin;
                                 currentRoute.destination = item.destination;
@@ -195,20 +159,20 @@ export function ProfileScreen ({navigation}){
             
             <View style={{top: "10%"}}>
                 <Text style={[styles.profileTextGrey]}>First Name</Text>
-                <Text style={[styles.profileTextBlack]}>Alice</Text>  
+                <Text style={[styles.profileTextBlack]}>Grayson</Text>  
             </View>
 
         
             <View style={{top: "10%"}}>
                 <View style={[styles.separator]} />
                 <Text style={[styles.profileTextGrey]}>Last Name</Text>
-                <Text style={[styles.profileTextBlack]}>Bob</Text>
+                <Text style={[styles.profileTextBlack]}>Baker</Text>
             </View>
 
             <View style={{top: "10%"}}>
                 <View style={[styles.separator]} />
                 <Text style={[styles.profileTextGrey]}>Email Address</Text>
-                <Text style={[styles.profileTextBlack]}>alicebob@my.unt.edu</Text>
+                <Text style={[styles.profileTextBlack]}>GraysonBaker@my.unt.edu</Text>
             </View>
 
             <View style={{top: "10%"}}>
@@ -309,11 +273,19 @@ export function LoginScreen ({navigation}) {
                 <LinearGradient colors={["#9EDE9E", "lightgrey"]} style={[styles.gradient]} start={[0,1]} end={[1,1]}/>
                 <Image source={show ? (require("./assets/sign-up.png")) : (require("./assets/login.png"))} style={{height: 150, width: 150}}/>
                 {/*First and last name hide themselves in login mode*/}
-                {show ?(<TextInput style={[styles.loginInput]} placeholder="First Name:" onChangeText={setFirst} value={first}/>) : null}
-                {show ?(<TextInput style={[styles.loginInput]} placeholder="Last Name:" onChangeText={setLast} value={last}/>): null}
+                {/** 
+                {show ?(<TextInput style={[styles.loginInput]} placeholder="First Name:" onChangeText={(value) => {first.setFirst({value})}}/>): null}
+                {show ?(<TextInput style={[styles.loginInput]} placeholder="Last Name:" onChangeText={(value) => setLast(value.nativeEvent.text)}/>): null}
                 {/*email and password remain throughout both modes*/}
-                <TextInput style={[styles.loginInput]} placeholder="Email:" onChangeText={setEmail} value={email}/>
-                <TextInput style={[styles.loginInput]} placeholder="Password:" onChangeText={setPass} value={pass} secureTextEntry={true}/>
+                {/*
+                <TextInput style={[styles.loginInput]} keyboardType="email-address" placeholder="Email:" onChangeText={(value) => setEmail(value.nativeEvent.text)}/>
+                <TextInput style={[styles.loginInput]} placeholder="Password:" onChangeText={(value) => setPass(value.nativeEvent.text)} secureTextEntry={true}/>
+                */}
+                {show ?(<TextInput style={[styles.loginInput]} placeholder="First Name:" onChangeText={setFirst}/>): null}
+                {show ?(<TextInput style={[styles.loginInput]} placeholder="Last Name:" onChangeText={setLast}/>): null}
+                {/*email and password remain throughout both modes*/}
+                <TextInput style={[styles.loginInput]} keyboardType="email-address" placeholder="Email:" onChangeText={setEmail}/>
+                <TextInput style={[styles.loginInput]} placeholder="Password:" onChangeText={setPass} secureTextEntry={true}/>
                 <Button title="Continue" color="red" onPress={() => show ? navigation.navigate("ChooseUserType") : navigation.navigate("Homepage")}/>
             </KeyboardAvoidingView>
             <Text style={{fontFamily: "Avenir", position: "absolute", top: "80%", alignSelf: "center", fontWeight: "bold", color: "dimgray", fontSize: 17}}>{show ? "Returning user?" : "New user?"}</Text>
